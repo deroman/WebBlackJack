@@ -19,6 +19,8 @@ hideShow("double");
 
 hideShow("stand");
 
+hideShow("doubl");
+
 
 
 //Utility functions
@@ -132,6 +134,15 @@ function start() {
 		hideShow("hit");
 		hideShow("stand");
 		hideShow("start");
+		hideShow("doubl");
+		if (count(playerValues) == 21) {
+			bet += (bet/2);
+			alert("Blackjack!");
+			stand();
+		}
+		if (dealerValues[0] == 11) {
+			alert("The dealer may have blackjack! :O");
+		}
 	}
 	else {
 		while (true) {
@@ -158,6 +169,23 @@ function wait(ms){
   }
 }
 
+function doubl() {
+	if (bet * 2 <= money) {
+		bet *= 2;
+		updateWrite(bet + "(doubled)", "bet");
+		playerValues.push(draw("player"));
+		var c = count(playerValues);
+		updateWrite(c, "count");
+		if (c > 21) {
+		lost();
+		}
+		else {
+		stand();
+		}
+	}
+	else alert("You don't have enough money!");
+}
+
 function stand() {
 	var e = document.getElementById("dealer");  
     var child = e.firstElementChild; 
@@ -178,9 +206,15 @@ function stand() {
 	if (count(dealerValues) > count(playerValues) && count(dealerValues) < 21) {
 		lost();
 	}
+	else if (count(dealerValues) == count(playerValues)) {
+		tie();
+	}
 	else {
 		win();
 	}
+}
+function tie() {
+	end();
 }
 
 function lost() {
@@ -199,6 +233,7 @@ function end() {
 	updateWrite(bet, "bet");
 	hideShow("hit");
 	hideShow("stand");
+	hideShow("doubl");
 	hideShow("start");
 	hideShow("raise");
 	hideShow("decrease");
